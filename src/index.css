@@ -1,30 +1,33 @@
-*, *::after, *::before {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
   transition: 0.3s;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 html body {
   margin: 0;
-  color: #000000;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden; /* Hide horizontal scrollbar */
   scroll-behavior: smooth;
   height: 100%;
   transition: 0.3s;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
+  background: #f5f9fc;
+  color: #283445;
 }
-@media(max-width:700px){
-  body{
+@media (max-width: 700px) {
+  body {
     font-size: 14px;
   }
 }
 
-html{
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-  transition: 0.3s;
-}
 /* width */
 ::-webkit-scrollbar {
   width: 5px;
@@ -32,17 +35,28 @@ html{
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 5px grey;
   border-radius: 5px;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #9152f8; 
+  background: #283445;
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #9152f8; 
+  background: #283445;
+}
+
+.modal-content {
+  border: none !important;
+  border-radius: 12px !important;
+}
+
+button,
+input,
+textarea {
+  outline: none !important;
 }

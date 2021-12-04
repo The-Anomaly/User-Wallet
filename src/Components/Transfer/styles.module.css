@@ -1,0 +1,108 @@
+.closeBtn {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  color: red;
+  background: transparent;
+  border: 1px solid red;
+  border-radius: 6px;
+  margin: 1rem 1rem 1rem auto;
+}
+.transfer [class*="modal-body"] {
+  padding: 2rem;
+}
+.transfer [class*="modal-title"] {
+  text-align: center;
+  font-weight: 800;
+  padding: 0 2rem;
+}
+.inputWrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+.inputWrap label {
+  position: absolute;
+  font-size: 12px;
+  top: 2px;
+  left: 1rem;
+  font-weight: 500;
+  color: #8a94a6;
+  z-index: 2;
+}
+.transfer input {
+  background: #f3f3f3;
+  height: 50px;
+  padding-left: 1rem;
+  border-radius: 8px;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  padding-top: 1rem;
+}
+
+.walletDropdown [class*="transferSelect__control"] {
+  font-size: 14px;
+  /* color: #323b4b; */
+  background: #f3f3f3;
+  height: 50px;
+  padding-left: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+}
+
+.walletDropdown [class*="transferSelect__indicator-separator"] {
+  display: none;
+}
+.walletDropdown [class*="transferSelect__control--is-focused"] {
+  border: inherit;
+  box-shadow: none;
+  border: none;
+}
+.walletDropdown [class*="transferSelect__placeholder"] {
+  visibility: visible !important;
+  padding-top: 10px;
+}
+
+.walletDropdown [class*="transferSelect__value-container"] {
+  height: 100%;
+  padding: 0;
+}
+
+.walletDropdown [class*="transferSelect__single-value"] {
+  padding-top: 1rem;
+}
+
+.walletDropdown [class*="transferSelect__menu"] {
+  z-index: 4;
+}
+
+.btn {
+  border: none;
+  background: #6fcf97;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 10px 1rem;
+  width: 100%;
+  font-weight: 500;
+  max-width: 200px;
+  display: block;
+  margin: auto;
+}
+.note {
+    font-size: 12px;
+    font-weight: 600;
+}
+.btnSec {
+    display: flex;
+}
+.btnSec button {
+    width: 48%;
+}

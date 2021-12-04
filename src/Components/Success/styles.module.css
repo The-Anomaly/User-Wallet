@@ -1,0 +1,40 @@
+.closeBtn {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  color: red;
+  background: transparent;
+  border: 1px solid red;
+  border-radius: 6px;
+  margin: 1rem 1rem 1rem auto;
+}
+.transfer [class*="modal-body"] {
+  padding: 2rem;
+}
+.btn {
+  border: none;
+  background: #6fcf97;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 10px 1rem;
+  width: 100%;
+  font-weight: 500;
+  max-width: 200px;
+  display: block;
+  margin: auto;
+}
+.success {
+  width: 90%;
+  margin: auto;
+  display: block;
+}
+.txt {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  font-size: 20px;
+}
