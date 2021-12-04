@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { users } from "Utils/Types/users";
-import Home from "./Components/Home";
+import Home from "./SideEffects/Home";
 
 const App = () => {
   const userList: users[] = [
@@ -37,9 +37,9 @@ const App = () => {
     },
     {
       id: "pqr",
-      fname: "Tunde",
-      lname: "Badmus",
-      walletBalance: 135850,
+      fname: "Yemisi",
+      lname: "Williams",
+      walletBalance: 85850,
     },
     {
       id: "stu",

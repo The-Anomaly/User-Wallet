@@ -8,27 +8,28 @@ import Tip from "../Tooltip";
 import Transfer from "../Transfer";
 import { users } from "Utils/Types/users";
 
-const Home = () => {
-  const [send, setSend] = React.useState<boolean>(false);
-  const [friends, setFriends] = React.useState<users[]>([]);
-  const [friend, setFriend] = React.useState<users>();
-  const [self, setSelf] = React.useState<users>();
+interface HomeProps {
+  friends: users[];
+  self: users | undefined;
+  onChangeFriend: (friend: users | undefined) => void;
+}
 
-  React.useEffect(() => {
-    const users = localStorage.getItem("users");
-    if (users) {
-      setFriends(JSON.parse(users).slice(1, 4));
-      setSelf(JSON.parse(users)[0]);
-    }
-  }, []);
-
+const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
   const roundBalance = (amount: number) => {
-    let num = Math.floor(amount / 1000) * 1000
-    return String(num).replaceAll("0", "")
-  }
+    let num = Math.floor(amount / 1000) * 1000;
+    return String(num).replaceAll("0", "");
+  };
+
+  const sendToFriend = (index: number) => {
+    onChangeFriend(friends[index]);
+  };
+
+  const sendFunds = () => {
+    onChangeFriend(undefined);
+  };
+  
   return (
     <>
-      <Transfer show={send} closeModal={() => setSend(false)} friend={friend} self={self} />
       {self && (
         <div className={styles.container}>
           <aside className={styles.sectionOne}>
@@ -41,13 +42,15 @@ const Home = () => {
             <section className={styles.heroWrap}>
               <img className={styles.gift} src={gift} alt="gifting" />
               <div>
-              <h1 className={styles.title}>
-                Hey {self?.fname + " " + self?.lname} <span>👋🏽</span>
-              </h1>
-              <p className={styles.txt}>
-                You're steps away from putting a smile on the faces of your
-                friends. <br />Send someone some money today!
-              </p></div>
+                <h1 className={styles.title}>
+                  Hey {self?.fname + " " + self?.lname} <span>👋🏽</span>
+                </h1>
+                <p className={styles.txt}>
+                  You're steps away from putting a smile on the faces of your
+                  friends. <br />
+                  Send someone some money today!
+                </p>
+              </div>
             </section>
 
             <section className={styles.balanceWrap}>
@@ -86,8 +89,7 @@ const Home = () => {
                       </div>
                       <button
                         onClick={() => {
-                          setSend(true);
-                          setFriend(friends[index]);
+                          sendToFriend(index);
                         }}
                       >
                         Send funds
@@ -100,18 +102,11 @@ const Home = () => {
               <h2 className={styles.title3}>
                 Can't find your intended recipient not above? Try here
               </h2>
-              <button
-                onClick={() => {
-                  setSend(true);
-                  setFriend(undefined);
-                }}
-              >
-                Send funds
-              </button>
+              <button onClick={sendFunds}>Send funds</button>
             </section>
           </section>
           {/* <aside className={styles.sectionThree}>
-            Side
+            Transfer History
             <img src={wallet} />
           </aside> */}
         </div>
@@ -127,4 +122,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeUI;

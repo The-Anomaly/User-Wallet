@@ -11,14 +11,22 @@ interface TransferProps {
   closeModal: () => void;
   friend?: users;
   self: users | undefined;
+  recipientOptions: optionType[];
+  onChangeCurrency: (x: string) => void;
+  onChangeBalance: (x: number) => void
+//   onChangeRecipient: (x: string) => void;
+//   onChangeAmount: (x: string) => void;
+  convertCurrency: (amount: number, currencyTo: string) => number;
+  balanceLeft: (amount: number) => number;
+  sendAndUpdate: () => void;
 }
 
-interface optionType {
+export interface optionType {
   value: string;
   label: string;
 }
 
-let initialState: optionType = {
+export const initialState: optionType = {
   value: "",
   label: "",
 };
@@ -43,6 +51,14 @@ const Transfer: React.FC<TransferProps> = ({
   closeModal,
   friend,
   self,
+  recipientOptions,
+  onChangeCurrency,
+  onChangeBalance,
+//   onChangeRecipient,
+//   onChangeAmount,
+  convertCurrency,
+  balanceLeft,
+  sendAndUpdate,
 }) => {
   const [currency, setCurrency] = React.useState(initialState);
   const [recipient, setRecipient] = React.useState(initialState);
@@ -52,23 +68,28 @@ const Transfer: React.FC<TransferProps> = ({
     NGN: 0,
     EUR: 0,
   });
-  const [recipientOptions, setRecipientOptions] = React.useState<optionType[]>(
-    []
-  );
+  //   const [recipientOptions, setRecipientOptions] = React.useState<optionType[]>(
+  //     []
+  //   );
   const [convertedAmount, setConvertedAmount] = React.useState<number>(0);
   const [balance, setBalance] = React.useState<number>(0);
   const [confirm, setConfirm] = React.useState<boolean>(false);
   const [success, setSuccess] = React.useState<boolean>(false);
 
   const handleChangeCurrency = (val: SingleValue<optionType>) => {
-    val && setCurrency(val);
+    if (val) {
+      setCurrency(val);
+      onChangeCurrency(val?.value);
+    }
   };
 
   const handleChangeRecipient = (val: SingleValue<optionType>) => {
-    val && setRecipient(val);
+    if (val) {
+      setRecipient(val);
+    //   onChangeRecipient(val.value);
+    }
   };
 
-  //   const handleChangeAmount = (e: Event) => {
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     //
     // console.log(e.keyCode)
@@ -84,6 +105,7 @@ const Transfer: React.FC<TransferProps> = ({
     //     alert('Prevent page from going back');
     // }
     setAmount(value);
+    onChangeBalance(balanceLeft(parseInt(value)));
     setConvertedAmount(convertCurrency(parseInt(value), currency.value));
     setBalance(balanceLeft(parseInt(value)));
   };
@@ -92,36 +114,7 @@ const Transfer: React.FC<TransferProps> = ({
     return Math.round(num * 1000000) / 1000000;
   };
 
-  const getRate = () => {
-    const YOUR_ACCESS_KEY = "c1f244c974be138df12e40029e8f646e";
-    axios
-      .get(
-        `http://api.exchangeratesapi.io/v1/latest?access_key=${YOUR_ACCESS_KEY}&symbols=USD,EUR,NGN`
-      )
-      .then((response) => {
-        console.log(response);
-        console.log(response.data.rates);
-        // base rate = EUR
-        let rates = response.data.rates;
 
-        // base rate = USD
-        let newRates = {
-          USD: 1,
-          NGN: roundToSixDecimals(rates.USD / rates.NGN),
-          EUR: roundToSixDecimals(rates.USD / rates.EUR),
-        };
-
-        //
-        console.log(rates, "base EUR");
-        console.log(newRates, "base USD");
-        setRates(newRates);
-        localStorage.setItem("rates", JSON.stringify(newRates));
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {});
-  };
 
   React.useEffect(() => {
     if (self) {
@@ -129,33 +122,6 @@ const Transfer: React.FC<TransferProps> = ({
     }
   }, [self]);
 
-  React.useEffect(() => {
-    let rates = localStorage.getItem("rates");
-    const usersList = localStorage.getItem("users");
-
-    if (usersList) {
-      let list = JSON.parse(usersList);
-      console.log(list);
-      let ray: optionType[] = [];
-      list.map((item: users) => {
-        console.log(item);
-        return ray.push({
-          value: `${item?.fname} ${item?.lname}`,
-          label: `${item?.fname} ${item?.lname}`,
-        });
-      });
-
-      setRecipientOptions(ray);
-    }
-
-    // getRate();
-    if (!rates) {
-      getRate();
-    } else {
-      setRates(JSON.parse(rates));
-      console.log(JSON.parse(rates));
-    }
-  }, []);
 
   React.useEffect(() => {
     if (friend) {
@@ -168,22 +134,6 @@ const Transfer: React.FC<TransferProps> = ({
     }
   }, [friend]);
 
-  const convertCurrency = (amount: number, currencyTo: string): number => {
-    let value: number = 1;
-    if (currencyTo === "USD" || currencyTo === "NGN" || currencyTo === "EUR") {
-      value = amount * rates[currencyTo];
-    }
-    return roundToSixDecimals(value);
-  };
-
-  const balanceLeft = (amount: number): number => {
-    let balance = 0;
-    if (self) {
-      balance = self.walletBalance - convertCurrency(amount, currency.value);
-      //   balance = self.walletBalance - convertedAmount;
-    }
-    return balance;
-  };
 
   const send = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -196,21 +146,7 @@ const Transfer: React.FC<TransferProps> = ({
 
   const confirmSend = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(Math.round(balance));
-    const users = localStorage.getItem("users");
-    if (self && users) {
-      let list = JSON.parse(users);
-      let newSelf: users = {
-        id: self?.id,
-        fname: self?.fname,
-        lname: self?.lname,
-        walletBalance: Math.round(balance),
-      };
-      list.splice(0, 1, newSelf);
-      console.log(newSelf);
-      console.log(list);
-      localStorage.setItem("users", JSON.stringify(list));
-    }
+    sendAndUpdate();
     setConfirm(false);
     setCurrency(initialState);
     setRecipient(initialState);
