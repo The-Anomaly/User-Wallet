@@ -119,11 +119,11 @@ const Transfer: React.FC<TransferProps> = ({
   const confirmSend = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let transaction: history = {
-        name: recipient.value,
-        dollarAmount: convertedAmount,
-        currencyAmount: amount,
-        currency: currency.value
-    }
+      name: recipient.value,
+      dollarAmount: convertedAmount,
+      currencyAmount: parseInt(amount),
+      currency: currency.value,
+    };
     sendAndUpdate(transaction);
     setConfirm(false);
     setCurrency(initialState);

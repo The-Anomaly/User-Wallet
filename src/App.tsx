@@ -70,7 +70,6 @@ const App = () => {
       console.log(JSON.parse(users));
     }
   }, []);
-
   return (
     <div>
       <BrowserRouter>

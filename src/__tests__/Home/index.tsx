@@ -13,6 +13,9 @@ export function renderHome(props: Partial<HomeProps> = {}) {
       return;
     },
     recentTransactions: [],
+    reset() {
+      return;
+    },
   };
   return render(<HomeUI {...defaultProps} {...props} />);
 }
@@ -117,7 +120,23 @@ describe("<Home />", () => {
 
     expect(recentContainer[1]).toBeInTheDocument();
     expect(name[1]).toHaveTextContent(/Elizabeth/);
-    expect(dollarAmount[1]).toHaveTextContent("-$1000");
-    expect(currencyAmount[1]).toHaveTextContent("USD 1000");
+    expect(dollarAmount[1]).toHaveTextContent("-$1,000");
+    expect(currencyAmount[1]).toHaveTextContent("USD 1,000");
+  });
+
+  test("should reset all values and clear history when `reset` is clicked", async () => {
+    const reset = jest.fn();
+    const { findByTestId } = renderHome({
+      self: mockedSelf,
+      friends: mockedFriends,
+      recentTransactions: mockedRecent,
+      reset,
+    });
+
+    const resetBtn = await findByTestId("reset");
+
+    userEvent.click(resetBtn);
+
+    expect(reset).toHaveBeenCalled();
   });
 });

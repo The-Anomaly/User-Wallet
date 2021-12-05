@@ -13,6 +13,7 @@ export interface HomeProps {
   self: users | undefined;
   onChangeFriend: (friend: users | undefined) => void;
   recentTransactions: history[];
+  reset: () => void;
 }
 
 const HomeUI: React.FC<HomeProps> = ({
@@ -20,6 +21,7 @@ const HomeUI: React.FC<HomeProps> = ({
   self,
   onChangeFriend,
   recentTransactions,
+  reset,
 }) => {
   const roundBalance = (amount: number) => {
     return Math.floor(amount / 1000);
@@ -128,11 +130,21 @@ const HomeUI: React.FC<HomeProps> = ({
                   key={index}
                   className={styles.historyItem}
                 >
-                  <p data-testid="recent-name" className={styles.historyTxt1}>{item.name}</p>
+                  <p data-testid="recent-name" className={styles.historyTxt1}>
+                    {item.name}
+                  </p>
                   <div>
-                    <p data-testid="recent-dollarAmount" className={styles.historyTxt2}>-${item.dollarAmount}</p>
-                    <p data-testid="recent-currencyAmount" className={styles.historyTxt3}>
-                      {item.currency} {item.currencyAmount}
+                    <p
+                      data-testid="recent-dollarAmount"
+                      className={styles.historyTxt2}
+                    >
+                      -${item.dollarAmount.toLocaleString()}
+                    </p>
+                    <p
+                      data-testid="recent-currencyAmount"
+                      className={styles.historyTxt3}
+                    >
+                      {item.currency} {item.currencyAmount.toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -157,6 +169,9 @@ const HomeUI: React.FC<HomeProps> = ({
           </aside>
         </div>
       )}
+      <button data-testid="reset" onClick={reset} className={styles.reset}>
+        Reset
+      </button>
       <div>
         {/* Attribution Links */}
         {/* <a href="https://www.streamlinehq.com">Free Money Bag PNG illustration by Streamline</a> */}

@@ -248,6 +248,16 @@
   display: block;
   margin: auto;
 }
+.reset {
+  position: fixed;
+  bottom: 0;
+  font-size: 13px;
+  border: none;
+  background: #283445;
+  color: #fff;
+  border-top-right-radius: 6px;
+  padding: 4px 8px;
+}
 
 @media screen and (max-width: 1000px) {
   .sectionOne {

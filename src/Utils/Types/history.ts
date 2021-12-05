@@ -1,6 +1,6 @@
 export interface history {
     name: string;
-    dollarAmount: number | string;
-    currencyAmount: number| string;
+    dollarAmount: number;
+    currencyAmount: number;
     currency: string;
   }

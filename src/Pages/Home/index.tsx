@@ -33,7 +33,7 @@ const Home = () => {
       let list = JSON.parse(users);
       setFriends(list.slice(1, 4));
       setSelf(list[0]);
-  
+
       let ray: optionType[] = [];
       list.map((item: users) => {
         if (item.id !== "abc") {
@@ -179,6 +179,10 @@ const Home = () => {
         self={self}
         onChangeFriend={(x) => sendFunds(x)}
         recentTransactions={recentTransactions}
+        reset={() => {
+          localStorage.clear();
+          window.location.reload();
+        }}
       />
     </>
   );
