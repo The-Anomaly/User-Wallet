@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { users } from "Utils/Types/users";
-import Home from "./SideEffects/Home";
+import Home from "./Pages/Home";
 
 const App = () => {
   const userList: users[] = [
@@ -66,9 +66,8 @@ const App = () => {
     // localStorage.setItem("users", JSON.stringify(userList));
     if (!users) {
       localStorage.setItem("users", JSON.stringify(userList));
-    }
-    else {
-      console.log(JSON.parse(users))
+    } else {
+      console.log(JSON.parse(users));
     }
   }, []);
 

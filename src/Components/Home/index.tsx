@@ -1,11 +1,10 @@
 import * as React from "react";
 import styles from "./styles.module.css";
 import wallet from "../../assets/vectors/wallet.svg";
-import gift from "../../assets/vectors/gifting.svg";
-import moneyBag from "../../assets/icons/money-bag.png";
-import user from "../../assets/icons/user.png";
-import Tip from "../Tooltip";
-import Transfer from "../Transfer";
+import gift from "assets/vectors/gifting.svg";
+import moneyBag from "assets/icons/money-bag.png";
+import user from "assets/icons/user.png";
+import Tip from "Components/Tooltip";
 import { users } from "Utils/Types/users";
 
 interface HomeProps {
@@ -27,7 +26,7 @@ const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
   const sendFunds = () => {
     onChangeFriend(undefined);
   };
-  
+
   return (
     <>
       {self && (
@@ -100,7 +99,7 @@ const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
             </section>
             <section className={styles.sendWrap}>
               <h2 className={styles.title3}>
-                Can't find your intended recipient not above? Try here
+                Can't find your intended recipient above? Try here
               </h2>
               <button onClick={sendFunds}>Send funds</button>
             </section>

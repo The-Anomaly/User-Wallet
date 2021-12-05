@@ -2,9 +2,7 @@ import * as React from "react";
 import { Modal } from "react-bootstrap";
 import styles from "./styles.module.css";
 import Select, { SingleValue } from "react-select";
-import axios from "axios";
 import { users } from "Utils/Types/users";
-import Success from "../Success";
 
 interface TransferProps {
   show: boolean;
@@ -13,12 +11,11 @@ interface TransferProps {
   self: users | undefined;
   recipientOptions: optionType[];
   onChangeCurrency: (x: string) => void;
-  onChangeBalance: (x: number) => void
-//   onChangeRecipient: (x: string) => void;
-//   onChangeAmount: (x: string) => void;
+  onChangeBalance: (x: number) => void;
   convertCurrency: (amount: number, currencyTo: string) => number;
   balanceLeft: (amount: number) => number;
   sendAndUpdate: () => void;
+  showSuccess: (x: boolean) => void;
 }
 
 export interface optionType {
@@ -54,27 +51,17 @@ const Transfer: React.FC<TransferProps> = ({
   recipientOptions,
   onChangeCurrency,
   onChangeBalance,
-//   onChangeRecipient,
-//   onChangeAmount,
   convertCurrency,
   balanceLeft,
   sendAndUpdate,
+  showSuccess,
 }) => {
   const [currency, setCurrency] = React.useState(initialState);
   const [recipient, setRecipient] = React.useState(initialState);
   const [amount, setAmount] = React.useState<string>("");
-  const [rates, setRates] = React.useState({
-    USD: 0,
-    NGN: 0,
-    EUR: 0,
-  });
-  //   const [recipientOptions, setRecipientOptions] = React.useState<optionType[]>(
-  //     []
-  //   );
   const [convertedAmount, setConvertedAmount] = React.useState<number>(0);
   const [balance, setBalance] = React.useState<number>(0);
   const [confirm, setConfirm] = React.useState<boolean>(false);
-  const [success, setSuccess] = React.useState<boolean>(false);
 
   const handleChangeCurrency = (val: SingleValue<optionType>) => {
     if (val) {
@@ -86,7 +73,6 @@ const Transfer: React.FC<TransferProps> = ({
   const handleChangeRecipient = (val: SingleValue<optionType>) => {
     if (val) {
       setRecipient(val);
-    //   onChangeRecipient(val.value);
     }
   };
 
@@ -110,18 +96,11 @@ const Transfer: React.FC<TransferProps> = ({
     setBalance(balanceLeft(parseInt(value)));
   };
 
-  const roundToSixDecimals = (num: number): number => {
-    return Math.round(num * 1000000) / 1000000;
-  };
-
-
-
   React.useEffect(() => {
     if (self) {
       setBalance(self.walletBalance);
     }
   }, [self]);
-
 
   React.useEffect(() => {
     if (friend) {
@@ -133,7 +112,6 @@ const Transfer: React.FC<TransferProps> = ({
       setRecipient(initialState);
     }
   }, [friend]);
-
 
   const send = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -153,12 +131,11 @@ const Transfer: React.FC<TransferProps> = ({
     setAmount("");
     setConvertedAmount(0);
     closeModal();
-    return setSuccess(true);
+    return showSuccess(true);
   };
 
   return (
     <>
-      <Success show={success} closeModal={() => setSuccess(false)} />
       <Modal className={styles.transfer} show={show} onHide={closeModal}>
         <button onClick={closeModal} className={styles.closeBtn}>
           &times;
