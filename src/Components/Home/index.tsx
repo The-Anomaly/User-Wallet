@@ -16,7 +16,7 @@ interface HomeProps {
 const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
   const roundBalance = (amount: number) => {
     let num = Math.floor(amount / 1000) * 1000;
-    return String(num).replaceAll("0", "");
+    return String(num).replace(/0/g, "");
   };
 
   const sendToFriend = (index: number) => {
