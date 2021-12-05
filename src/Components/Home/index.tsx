@@ -111,11 +111,13 @@ const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
         </div>
       )}
       <div>
+        {/* Attribution Links */}
         {/* <a href="https://www.streamlinehq.com">Free Money Bag PNG illustration by Streamline</a> */}
         {/* <a href="https://www.streamlinehq.com">Free Currency Exchange SVG illustration by Streamline</a> */}
         {/* <a href="https://www.streamlinehq.com">Free Gifting Online Gifting SVG illustration by Streamline</a> */}
         {/* <a href="https://www.streamlinehq.com">Free Search User 1 PNG illustration by Streamline</a> */}
         {/* <a href="https://www.streamlinehq.com">Free Business Deal SVG illustration by Streamline</a> */}
+        {/* <a href="https://www.streamlinehq.com">Free Currency Exchange SVG illustration by Streamline</a> */}
       </div>
     </>
   );
