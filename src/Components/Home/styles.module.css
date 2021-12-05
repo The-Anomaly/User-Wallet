@@ -2,7 +2,7 @@
 /* green - #6fcf97 */
 .container {
   display: grid;
-  grid-template-columns: 1fr 9fr;
+  grid-template-columns: 1fr 10fr 3fr;
   max-width: 1400px;
   margin: auto;
   min-height: 100vh;
@@ -13,10 +13,10 @@
 .sectionTwo {
   background: #ecf3f5;
   padding: 3rem;
-  margin-right: 10%;
+  /* margin-right: 10%; */
 }
 .sectionThree {
-  padding: 3rem 1rem;
+  padding: 3rem 8%;
 }
 .profileWrap {
   display: flex;
@@ -120,7 +120,7 @@
 }
 .title2 {
   font-weight: 600;
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 .friendsWrapper {
   display: flex;
@@ -141,13 +141,13 @@
 }
 .friend button {
   border: none;
-    background: #6fcf97;
-    color: #fff;
-    font-size: 14px;
-    border-radius: 6px;
-    padding: 8px 1rem;
-    width: 100%;
-    font-weight: 500;
+  background: #6fcf97;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 8px 1rem;
+  width: 100%;
+  font-weight: 500;
 }
 .friend button:hover {
   transform: scale(1.08);
@@ -155,7 +155,7 @@
 .userWrap {
   display: flex;
   align-items: center;
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 .userWrap p {
   font-weight: 500;
@@ -174,14 +174,14 @@
 }
 .sendWrap button {
   border: none;
-    background: #6fcf97;
-    color: #fff;
-    font-size: 14px;
-    border-radius: 6px;
-    padding: 8px 1rem;
-    width: 100%;
-    font-weight: 500;
-    max-width: 200px;
+  background: #6fcf97;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 8px 1rem;
+  width: 100%;
+  font-weight: 500;
+  max-width: 200px;
 }
 .txt2 {
   font-size: 14px;
@@ -189,8 +189,67 @@
 .giftMobile {
   display: none;
 }
+.historyTtl {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.historyItem {
+  background: #f4f6f8;
+  padding: 1rem;
+  font-size: 14px;
+  border-radius: 8px;
+  display: flex;
+  box-shadow: 1px 3px 7px rgb(0 0 0 / 10%);
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.historyTxt1 {
+  font-weight: 600;
+  margin: 0;
+  width: 50%;
+  word-break: break-word;
+}
+.historyTxt2 {
+  text-align: right;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.historyTxt3 {
+  font-size: 12px;
+  color: #8a94a6;
+  margin: 0;
+  white-space: nowrap;
+}
+.historyEmpty img {
+  width: 80%;
+  margin: 1rem auto;
+  display: block;
+  max-width: 300px;
+}
+.historyEmpty p {
+  text-align: center;
+  font-size: 14px;
+  width: 80%;
+  margin: 0 auto 1.5rem;
+  font-weight: 500;
+}
+.historyEmpty button {
+  border: none;
+  background: #6fcf97;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 8px 1rem;
+  font-weight: 500;
+  width: 80%;
+  max-width: 151px;
+  display: block;
+  margin: auto;
+}
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .sectionOne {
     background: #ecf3f5;
     padding: 1rem 1rem 0;

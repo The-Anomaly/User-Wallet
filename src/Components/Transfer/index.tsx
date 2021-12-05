@@ -3,6 +3,7 @@ import { Modal } from "react-bootstrap";
 import styles from "./styles.module.css";
 import Select, { SingleValue } from "react-select";
 import { users } from "Utils/Types/users";
+import { history } from "Utils/Types/history";
 
 interface TransferProps {
   show: boolean;
@@ -14,7 +15,7 @@ interface TransferProps {
   onChangeBalance: (x: number) => void;
   convertCurrency: (amount: number, currencyTo: string) => number;
   balanceLeft: (amount: number) => number;
-  sendAndUpdate: () => void;
+  sendAndUpdate: (transaction: history) => void;
   showSuccess: (x: boolean) => void;
 }
 
@@ -77,19 +78,7 @@ const Transfer: React.FC<TransferProps> = ({
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //
-    // console.log(e.keyCode)
     const { value } = e.target;
-    if (balance < convertedAmount) {
-      console.log("not enough");
-      console.log(balance);
-      console.log(convertedAmount);
-      return;
-    }
-    // if(e.key === "Backspace") {
-    //     e.preventDefault();
-    //     alert('Prevent page from going back');
-    // }
     setAmount(value);
     onChangeBalance(balanceLeft(parseInt(value)));
     setConvertedAmount(convertCurrency(parseInt(value), currency.value));
@@ -101,6 +90,11 @@ const Transfer: React.FC<TransferProps> = ({
       setBalance(self.walletBalance);
     }
   }, [self]);
+
+  React.useEffect(() => {
+    setAmount("");
+    setConvertedAmount(0);
+  }, [currency.value]);
 
   React.useEffect(() => {
     if (friend) {
@@ -124,7 +118,13 @@ const Transfer: React.FC<TransferProps> = ({
 
   const confirmSend = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    sendAndUpdate();
+    let transaction: history = {
+        name: recipient.value,
+        dollarAmount: convertedAmount,
+        currencyAmount: amount,
+        currency: currency.value
+    }
+    sendAndUpdate(transaction);
     setConfirm(false);
     setCurrency(initialState);
     setRecipient(initialState);
@@ -166,21 +166,29 @@ const Transfer: React.FC<TransferProps> = ({
                     placeholder="Enter amount to send"
                     value={amount}
                     onChange={handleChangeAmount}
+                    className={balance < 0 ? styles.red : ""}
                   />
+                  {currency?.value === "USD" && (
+                    <p className={styles.note}>
+                      Balance left: {balance < 0 ? 0 : balance}
+                    </p>
+                  )}
                 </div>
               ) : (
                 ""
               )}
-              {currency?.value !== "USD" ? (
+              {currency.value && currency?.value !== "USD" ? (
                 <div className={styles.inputWrap}>
                   <label>Amount in USD</label>
                   <input
                     type="text"
                     placeholder="Amount"
-                    value={convertedAmount}
+                    value={convertedAmount === 0 ? "" : convertedAmount}
                     readOnly
                   />
-                  <p className={styles.note}>Balance left: {balance}</p>
+                  <p className={styles.note}>
+                    Balance left: {balance > convertedAmount ? balance : 0}
+                  </p>
                 </div>
               ) : (
                 ""
@@ -201,7 +209,13 @@ const Transfer: React.FC<TransferProps> = ({
                   />
                 </div>
               )}
-              <button onClick={send} className={styles.btn}>
+              <button
+                disabled={
+                  balance < 0 || !recipient.value || !currency.value || !amount
+                }
+                onClick={send}
+                className={styles.btn}
+              >
                 Send
               </button>
             </form>
@@ -216,15 +230,17 @@ const Transfer: React.FC<TransferProps> = ({
                   readOnly
                 />
               </div>
-              <div className={styles.inputWrap}>
-                <label>Amount in {currency.value}</label>
-                <input
-                  type="text"
-                  placeholder="Amount"
-                  value={amount}
-                  readOnly
-                />
-              </div>
+              {currency.value !== "USD" && (
+                <div className={styles.inputWrap}>
+                  <label>Amount in {currency.value}</label>
+                  <input
+                    type="text"
+                    placeholder="Amount"
+                    value={amount}
+                    readOnly
+                  />
+                </div>
+              )}
               <div className={styles.inputWrap}>
                 <label>Amount in USD</label>
                 <input

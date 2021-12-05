@@ -1,22 +1,28 @@
 import * as React from "react";
 import styles from "./styles.module.css";
-import wallet from "../../assets/vectors/wallet.svg";
+import empty from "../../assets/vectors/empty.svg";
 import gift from "assets/vectors/gifting.svg";
 import moneyBag from "assets/icons/money-bag.png";
 import user from "assets/icons/user.png";
 import Tip from "Components/Tooltip";
 import { users } from "Utils/Types/users";
+import { history } from "Utils/Types/history";
 
 interface HomeProps {
   friends: users[];
   self: users | undefined;
   onChangeFriend: (friend: users | undefined) => void;
+  recentTransactions: history[];
 }
 
-const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
+const HomeUI: React.FC<HomeProps> = ({
+  friends,
+  self,
+  onChangeFriend,
+  recentTransactions,
+}) => {
   const roundBalance = (amount: number) => {
-    let num = Math.floor(amount / 1000) * 1000;
-    return String(num).replace(/0/g, "");
+    return Math.floor(amount / 1000);
   };
 
   const sendToFriend = (index: number) => {
@@ -104,10 +110,36 @@ const HomeUI: React.FC<HomeProps> = ({ friends, self, onChangeFriend }) => {
               <button onClick={sendFunds}>Send funds</button>
             </section>
           </section>
-          {/* <aside className={styles.sectionThree}>
-            Transfer History
-            <img src={wallet} />
-          </aside> */}
+          <aside className={styles.sectionThree}>
+            <h3 className={styles.historyTtl}>Recent Transactions</h3>
+            {recentTransactions && recentTransactions.length > 0 ? (
+              recentTransactions.map((item, index) => (
+                <div key={index} className={styles.historyItem}>
+                  <p className={styles.historyTxt1}>{item.name}</p>
+                  <div>
+                    <p className={styles.historyTxt2}>-${item.dollarAmount}</p>
+                    <p className={styles.historyTxt3}>
+                      {item.currency} {item.currencyAmount}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.historyEmpty}>
+                <img src={empty} alt="empty" />
+
+                <p >You have no recent transactions</p>
+                <button onClick={sendFunds}>Send funds</button>
+              </div>
+            )}
+            {/* <div className={styles.historyItem}>
+              <p className={styles.historyTxt1} >Name</p> 
+              <div>
+                <p className={styles.historyTxt2} >-$4000</p>
+                <p className={styles.historyTxt3} >NGN 2333</p>
+              </div>
+            </div> */}
+          </aside>
         </div>
       )}
       <div>

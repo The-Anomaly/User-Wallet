@@ -4,28 +4,13 @@ import { users } from "Utils/Types/users";
 import HomeUI from "Components/Home";
 import axios from "axios";
 import Success from "Components/Success";
+import { history } from "Utils/Types/history";
 
 const Home = () => {
   const [send, setSend] = React.useState<boolean>(false);
   const [friends, setFriends] = React.useState<users[]>([]);
   const [friend, setFriend] = React.useState<users>();
   const [self, setSelf] = React.useState<users>();
-
-  const users = localStorage.getItem("users");
-  React.useEffect(() => {
-    if (users) {
-      setFriends(JSON.parse(users).slice(1, 4));
-      setSelf(JSON.parse(users)[0]);
-    }
-  }, [users]);
-
-  const sendFunds = (x: users | undefined) => {
-    setSend(true);
-    setFriend(x);
-  };
-
-  //
-
   const [currency, setCurrency] = React.useState("");
   const [rates, setRates] = React.useState({
     USD: 0,
@@ -38,7 +23,35 @@ const Home = () => {
     []
   );
   const [success, setSuccess] = React.useState<boolean>(false);
+  const [recentTransactions, setRecentTransactions] = React.useState<history[]>(
+    []
+  );
 
+  const users = localStorage.getItem("users");
+  React.useEffect(() => {
+    if (users) {
+      let list = JSON.parse(users);
+      setFriends(list.slice(1, 4));
+      setSelf(list[0]);
+  
+      let ray: optionType[] = [];
+      list.map((item: users) => {
+        if (item.id !== "abc") {
+          return ray.push({
+            value: `${item?.fname} ${item?.lname}`,
+            label: `${item?.fname} ${item?.lname}`,
+          });
+        }
+      });
+
+      setRecipientOptions(ray);
+    }
+  }, [users]);
+
+  const sendFunds = (x: users | undefined) => {
+    setSend(true);
+    setFriend(x);
+  };
 
   const roundToSixDecimals = (num: number): number => {
     return Math.round(num * 1000000) / 1000000;
@@ -83,20 +96,6 @@ const Home = () => {
 
   React.useEffect(() => {
     let rates = localStorage.getItem("rates");
-    const usersList = localStorage.getItem("users");
-
-    if (usersList) {
-      let list = JSON.parse(usersList);
-      let ray: optionType[] = [];
-      list.map((item: users) => {
-        return ray.push({
-          value: `${item?.fname} ${item?.lname}`,
-          label: `${item?.fname} ${item?.lname}`,
-        });
-      });
-
-      setRecipientOptions(ray);
-    }
 
     // getRate();
     if (!rates) {
@@ -117,15 +116,24 @@ const Home = () => {
 
   const balanceLeft = (amount: number): number => {
     let balance = 0;
-    if (self) {
+    if (self && amount) {
       balance = self.walletBalance - convertCurrency(amount, currency);
-      //   balance = self.walletBalance - convertedAmount;
+    } else if (self && !amount) {
+      balance = self.walletBalance;
     }
+    console.log(balance);
     return balance;
   };
 
-  const sendAndUpdate = () => {
-    console.log(Math.round(balance));
+  const transactionHistory = localStorage.getItem("history");
+
+  React.useEffect(() => {
+    if (transactionHistory) {
+      setRecentTransactions(JSON.parse(transactionHistory));
+    }
+  }, [transactionHistory]);
+
+  const sendAndUpdate = (transaction: history) => {
     const users = localStorage.getItem("users");
     if (self && users) {
       let list = JSON.parse(users);
@@ -140,11 +148,19 @@ const Home = () => {
       console.log(list);
       localStorage.setItem("users", JSON.stringify(list));
     }
+    let newHistory: history[] = [];
+    if (transactionHistory) {
+      newHistory = JSON.parse(transactionHistory);
+      newHistory.unshift(transaction);
+    } else {
+      newHistory = [transaction];
+    }
+    localStorage.setItem("history", JSON.stringify(newHistory));
   };
 
   return (
     <>
-    <Success show={success} closeModal={() => setSuccess(false)} />
+      <Success show={success} closeModal={() => setSuccess(false)} />
       <Transfer
         show={send}
         closeModal={() => setSend(false)}
@@ -155,13 +171,14 @@ const Home = () => {
         onChangeBalance={(x: number) => setBalance(x)}
         convertCurrency={convertCurrency}
         balanceLeft={balanceLeft}
-        sendAndUpdate={sendAndUpdate}
+        sendAndUpdate={(x: history) => sendAndUpdate(x)}
         showSuccess={(x: boolean) => setSuccess(x)}
       />
       <HomeUI
         friends={friends}
         self={self}
         onChangeFriend={(x) => sendFunds(x)}
+        recentTransactions={recentTransactions}
       />
     </>
   );
