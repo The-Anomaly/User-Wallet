@@ -8,7 +8,7 @@ import Tip from "Components/Tooltip";
 import { users } from "Utils/Types/users";
 import { history } from "Utils/Types/history";
 
-interface HomeProps {
+export interface HomeProps {
   friends: users[];
   self: users | undefined;
   onChangeFriend: (friend: users | undefined) => void;
@@ -36,7 +36,7 @@ const HomeUI: React.FC<HomeProps> = ({
   return (
     <>
       {self && (
-        <div className={styles.container}>
+        <div data-testid="wallet" className={styles.container}>
           <aside className={styles.sectionOne}>
             <div className={styles.profileWrap}>
               <div className={styles.ball}></div>
@@ -47,7 +47,7 @@ const HomeUI: React.FC<HomeProps> = ({
             <section className={styles.heroWrap}>
               <img className={styles.gift} src={gift} alt="gifting" />
               <div>
-                <h1 className={styles.title}>
+                <h1 className={styles.title} data-testid="username">
                   Hey {self?.fname + " " + self?.lname} <span>👋🏽</span>
                 </h1>
                 <p className={styles.txt}>
@@ -61,8 +61,10 @@ const HomeUI: React.FC<HomeProps> = ({
             <section className={styles.balanceWrap}>
               <div className={styles.balance}>
                 <p className={styles.value}>
-                  <span className={styles.label}>Total balance:</span>$
-                  {roundBalance(self?.walletBalance)}k
+                  <span className={styles.label}>Total balance:</span>
+                  <span data-testid="balance">
+                    ${roundBalance(self?.walletBalance)}k
+                  </span>
                 </p>
 
                 <img src={moneyBag} alt="money bag" />
@@ -85,14 +87,19 @@ const HomeUI: React.FC<HomeProps> = ({
                 {friends &&
                   friends.length > 0 &&
                   friends.map((item, index) => (
-                    <div key={index} className={styles.friend}>
+                    <div
+                      data-testid="friends"
+                      key={index}
+                      className={styles.friend}
+                    >
                       <div className={styles.userWrap}>
                         <img src={user} alt="search user" />{" "}
-                        <p>
+                        <p data-testid="friend-name">
                           {item.fname} {item.lname}
                         </p>
                       </div>
                       <button
+                        data-testid="friend-send"
                         onClick={() => {
                           sendToFriend(index);
                         }}
@@ -107,18 +114,24 @@ const HomeUI: React.FC<HomeProps> = ({
               <h2 className={styles.title3}>
                 Can't find your intended recipient above? Try here
               </h2>
-              <button onClick={sendFunds}>Send funds</button>
+              <button data-testid="alternative-send" onClick={sendFunds}>
+                Send funds
+              </button>
             </section>
           </section>
           <aside className={styles.sectionThree}>
             <h3 className={styles.historyTtl}>Recent Transactions</h3>
             {recentTransactions && recentTransactions.length > 0 ? (
               recentTransactions.map((item, index) => (
-                <div key={index} className={styles.historyItem}>
-                  <p className={styles.historyTxt1}>{item.name}</p>
+                <div
+                  data-testid="recent-transactions"
+                  key={index}
+                  className={styles.historyItem}
+                >
+                  <p data-testid="recent-name" className={styles.historyTxt1}>{item.name}</p>
                   <div>
-                    <p className={styles.historyTxt2}>-${item.dollarAmount}</p>
-                    <p className={styles.historyTxt3}>
+                    <p data-testid="recent-dollarAmount" className={styles.historyTxt2}>-${item.dollarAmount}</p>
+                    <p data-testid="recent-currencyAmount" className={styles.historyTxt3}>
                       {item.currency} {item.currencyAmount}
                     </p>
                   </div>
@@ -126,10 +139,12 @@ const HomeUI: React.FC<HomeProps> = ({
               ))
             ) : (
               <div className={styles.historyEmpty}>
-                <img src={empty} alt="empty" />
+                <img data-testid="recent-img" src={empty} alt="empty" />
 
-                <p >You have no recent transactions</p>
-                <button onClick={sendFunds}>Send funds</button>
+                <p>You have no recent transactions</p>
+                <button data-testid="recent-send" onClick={sendFunds}>
+                  Send funds
+                </button>
               </div>
             )}
             {/* <div className={styles.historyItem}>
